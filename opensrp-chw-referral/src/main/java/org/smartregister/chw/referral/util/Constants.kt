@@ -124,6 +124,7 @@ object Constants {
         const val REFERRAL_SERVICE_IDS = "REFERRAL_SERVICE_IDS"
         const val USE_CUSTOM_LAYOUT = "USE_CUSTOM_LAYOUT"
         const val IS_ADDO_LINKAGE = "IS_ADDO_LINKAGE"
+        const val IS_KITUONI_LINKAGE = "IS_KITUONI_LINKAGE"
     }
 
     /**

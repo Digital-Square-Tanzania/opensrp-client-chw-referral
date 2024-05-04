@@ -121,5 +121,8 @@
     <string name="addo_linkage_submitted_successfully">Linkage sent to the Addo</string>
     <string name="linkage_not_submitted">Linkage not sent to Addo</string>
     <string name="linkage_submitted">Linkage sent to Addo</string>
+    <string name="hello">Linkage not sent to Addo</string>
+    <string name="kituoni_linkage_submitted_successfully">Linkage sent to Kituoni</string>
+    <string name="kituoni_linkage_not_submitted">Linkage not sent to Kituoni</string>
 
 </resources>

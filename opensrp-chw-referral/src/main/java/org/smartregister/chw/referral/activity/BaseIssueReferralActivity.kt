@@ -63,6 +63,8 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
 
     private var isAddoLinkage: Boolean =  false
 
+    private var isKituoniLinkage: Boolean =  false
+
     protected val locationID: String
         get() = org.smartregister.Context.getInstance().allSharedPreferences()
                 .getPreference(AllConstants.CURRENT_LOCATION_ID)
@@ -76,6 +78,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
             formName = getStringExtra(Constants.ActivityPayload.REFERRAL_FORM_NAME)
             useCustomLayout = getBooleanExtra(Constants.ActivityPayload.USE_CUSTOM_LAYOUT, false)
             isAddoLinkage = getBooleanExtra(Constants.ActivityPayload.IS_ADDO_LINKAGE, false)
+            isKituoniLinkage = getBooleanExtra(Constants.ActivityPayload.IS_KITUONI_LINKAGE, false)
 
             try {
                 jsonForm = JSONObject(getStringExtra(Constants.ActivityPayload.JSON_FORM))
@@ -130,21 +133,29 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                             formData[JsonFormConstants.CHW_REFERRAL_SERVICE] =
                                     NFormViewData().apply { value = referralTaskFocus }
 
-                            presenter!!.saveForm(formData, jsonForm!!, isAddoLinkage)
+                            presenter!!.saveForm(formData, jsonForm!!, isAddoLinkage,isKituoniLinkage)
 
-                            if (!isAddoLinkage) {
-                                Toast.makeText(
-                                        applicationContext,
-                                        getString(R.string.referral_submitted_successfully),
-                                        Toast.LENGTH_LONG
-                                ).show()
-                            } else {
+                              if(isAddoLinkage) {
                                 Toast.makeText(
                                         applicationContext,
                                         getString(R.string.addo_linkage_submitted_successfully),
                                         Toast.LENGTH_LONG
                                 ).show()
                             }
+                            else if(isKituoniLinkage) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    getString(R.string.kituoni_linkage_submitted_successfully),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                            else{
+                                  Toast.makeText(
+                                      applicationContext,
+                                      getString(R.string.referral_submitted_successfully),
+                                      Toast.LENGTH_LONG
+                                  ).show()
+                              }
 
                             Timber.d("Saved Data = %s", formBuilder?.getFormDataAsJson())
                             val intent = Intent()

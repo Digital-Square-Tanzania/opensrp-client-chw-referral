@@ -52,9 +52,9 @@ open class BaseIssueReferralPresenter(
         this.memberObject = memberObject
     }
 
-    override fun saveForm(valuesHashMap: HashMap<String, NFormViewData>, jsonObject: JSONObject, isAddoLinkage: Boolean) {
+    override fun saveForm(valuesHashMap: HashMap<String, NFormViewData>, jsonObject: JSONObject, isAddoLinkage: Boolean, isKituoniLinkage: Boolean) {
         try {
-            interactor.saveRegistration(baseEntityID, valuesHashMap, jsonObject, this, isAddoLinkage)
+            interactor.saveRegistration(baseEntityID, valuesHashMap, jsonObject, this, isAddoLinkage,isKituoniLinkage)
         } catch (e: JSONException) {
             Timber.e(Log.getStackTraceString(e))
         } catch (e: SQLiteException) {
@@ -66,11 +66,15 @@ open class BaseIssueReferralPresenter(
 
     override fun onNoUniqueId() = Unit
 
-    override fun onRegistrationSaved(saveSuccessful: Boolean, isAddoLinkage: Boolean) {
+    override fun onRegistrationSaved(saveSuccessful: Boolean, isAddoLinkage: Boolean, isKituoniLinkage: Boolean) {
         val context = getView() as Activity
         val messageId = if (isAddoLinkage) {
             if (saveSuccessful) R.string.linkage_submitted else R.string.linkage_not_submitted
-        } else {
+        }
+       else if (isKituoniLinkage) {
+            if (saveSuccessful) R.string.kituoni_linkage_submitted_successfully else R.string.kituoni_linkage_not_submitted
+        }
+        else {
             if (saveSuccessful) R.string.referral_submitted else R.string.referral_not_submitted
         }
         Utils.showToast(context, context.getString(messageId))

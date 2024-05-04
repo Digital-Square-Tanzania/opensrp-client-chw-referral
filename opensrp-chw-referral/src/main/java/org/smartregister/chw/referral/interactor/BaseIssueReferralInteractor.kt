@@ -30,7 +30,7 @@ open class BaseIssueReferralInteractor : BaseIssueReferralContract.Interactor {
     @Throws(Exception::class)
     override fun saveRegistration(
             baseEntityId: String, valuesHashMap: HashMap<String, NFormViewData>,
-            jsonObject: JSONObject, callBack: BaseIssueReferralContract.InteractorCallBack, isAddoLinkage: Boolean
+            jsonObject: JSONObject, callBack: BaseIssueReferralContract.InteractorCallBack, isAddoLinkage: Boolean, isKituoniLinkage: Boolean
     ) {
         val allSharedPreferences = referralLibrary.context.allSharedPreferences()
         val extractReferralProblems = extractReferralProblems(valuesHashMap)
@@ -62,7 +62,7 @@ open class BaseIssueReferralInteractor : BaseIssueReferralContract.Interactor {
                 createReferralTask(referralTask, referralLibrary)
             }
         }
-        callBack.onRegistrationSaved(hasProblems, isAddoLinkage)
+        callBack.onRegistrationSaved(hasProblems, isAddoLinkage, isKituoniLinkage = false)
     }
 
 }

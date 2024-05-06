@@ -58,11 +58,15 @@ open class BaseIssueReferralInteractor : BaseIssueReferralContract.Interactor {
 
             if (isAddoLinkage) {
                 createAddoLinkageTask(referralTask, referralLibrary)
-            } else {
+            }
+           else if (isKituoniLinkage) {
+                createAddoLinkageTask(referralTask, referralLibrary)
+            }
+            else {
                 createReferralTask(referralTask, referralLibrary)
             }
         }
-        callBack.onRegistrationSaved(hasProblems, isAddoLinkage, isKituoniLinkage = false)
+        callBack.onRegistrationSaved(hasProblems, isAddoLinkage, isKituoniLinkage)
     }
 
 }

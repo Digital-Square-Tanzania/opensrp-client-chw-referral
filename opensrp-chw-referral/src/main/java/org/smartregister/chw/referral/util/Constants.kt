@@ -63,6 +63,7 @@ object Constants {
     object ReferralType {
         const val COMMUNITY_TO_FACILITY_REFERRAL = "community_to_facility_referral"
         const val FACILITY_TO_COMMUNITY_REFERRAL = "facility_to_community_referral"
+        const val COMMUNITY_TO_ADDO_REFERRAL = "community_to_addo_referral"
     }
 
     /**

@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.nerdstone.neatformcore.utils.isNotNull
 import org.joda.time.DateTime
 import org.joda.time.Period
 import org.smartregister.chw.referral.R
@@ -16,6 +17,7 @@ import org.smartregister.chw.referral.fragment.BaseReferralRegisterFragment
 import org.smartregister.chw.referral.util.Constants
 import org.smartregister.chw.referral.util.DBConstants
 import org.smartregister.chw.referral.util.ReferralUtil
+import org.smartregister.chw.referral.util.Util
 import org.smartregister.commonregistry.CommonPersonObjectClient
 import org.smartregister.cursoradapter.RecyclerViewProvider
 import org.smartregister.util.Utils
@@ -129,6 +131,24 @@ open class ReferralRegisterProvider(
                 }
                 registerColumns.setOnClickListener(onClickListener)
                 registerColumns.setOnClickListener { patientColumn.performClick() }
+
+                val task = Util.getFollowUpTask(Utils.getValue(pc.columnmaps, Constants.Task.Key.TASK_ID, false))
+                if (task.isNotNull()){
+                    followUpWrapper.apply {
+                        visibility = View.VISIBLE
+                        setOnClickListener(onClickListener)
+                        tag = pc
+                        setTag(R.id.VIEW_ID, BaseReferralRegisterFragment.LINKAGE_FOLLOWUP)
+                        setTag(R.id.FOLLOW_UP_TASK, task )
+                    }
+                }else{
+                    followUpWrapper.apply {
+                        visibility = View.INVISIBLE
+                    }
+                }
+
+                dueWrapper.setOnClickListener(onClickListener)
+
                 setReferralStatusColor(
                         context, textReferralStatus,
                         Utils.getValue(pc.columnmaps, DBConstants.Key.REFERRAL_STATUS, true)
@@ -153,7 +173,7 @@ open class ReferralRegisterProvider(
                 )
                 textViewStatus.text = context.getString(R.string.referral_status_failed)
             }
-            Constants.BusinessStatus.COMPLETE -> {
+            Constants.Task.Status.COMPLETED -> {
                 textViewStatus.setTextColor(
                         ContextCompat.getColor(context, R.color.alert_complete_green)
                 )
@@ -172,6 +192,7 @@ open class ReferralRegisterProvider(
         var textViewFacility: TextView = itemView.findViewById(R.id.text_view_facility)
         var registerColumns: View = itemView.findViewById(R.id.register_columns)
         var dueWrapper: View = itemView.findViewById(R.id.due_button_wrapper)
+        var followUpWrapper: View = itemView.findViewById(R.id.followup_button_wrapper);
     }
 
     open inner class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view) {

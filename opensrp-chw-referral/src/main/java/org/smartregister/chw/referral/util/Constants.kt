@@ -77,6 +77,26 @@ object Constants {
         const val LINKED = "Linked"
     }
 
+
+    object Task {
+
+        object Key {
+            const val TASK_ID = "TaskId"
+            const val FOLLOW_UP_TASK = "follow_up_task"
+        }
+
+        object Status {
+            const val DRAFT = "Draft"
+            const val READY = "Ready"
+            const val CANCELLED = "Cancelled"
+            const val IN_PROGRESS = "In-Progress"
+            const val COMPLETED = "COMPLETED"
+            const val FAILED = "FAILED"
+            const val ARCHIVED = "ARCHIVED"
+            const val EXPIRED = "EXPIRED"
+        }
+    }
+
     /**
      * Referral constants used thought the application
      */

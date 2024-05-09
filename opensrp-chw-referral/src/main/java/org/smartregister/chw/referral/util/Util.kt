@@ -16,16 +16,21 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.nerdstone.neatformcore.domain.model.NFormViewData
+import com.nerdstone.neatformcore.utils.isNotNull
 import org.json.JSONObject
 import org.koin.core.KoinComponent
+import org.koin.core.get
+import org.koin.core.inject
 import org.smartregister.chw.referral.R
 import org.smartregister.chw.referral.ReferralLibrary
 import org.smartregister.chw.referral.contract.BaseReferralCallDialogContract
 import org.smartregister.chw.referral.contract.BaseReferralCallDialogContract.Dialer
 import org.smartregister.chw.referral.custom_views.ClipboardDialog
 import org.smartregister.clientandeventmodel.Event
+import org.smartregister.domain.Task
 import org.smartregister.domain.db.EventClient
 import org.smartregister.repository.BaseRepository
+import org.smartregister.repository.TaskRepository
 import org.smartregister.util.PermissionUtils
 import org.smartregister.util.Utils
 import timber.log.Timber
@@ -142,4 +147,16 @@ object Util : KoinComponent {
         }
         return "${formattedFpMethod ?: ""}$formattedOtherProblem".trim(',', ' ')
     }
+
+
+    /**
+     * returns follow up task for the current referral/linkage task if present
+     */
+    fun getFollowUpTask(taskId : String? ) : Task? {
+        val taskRepository : TaskRepository by inject()
+        val task = taskRepository.getTaskByIdentifier(taskId);
+        val followUpTask = taskRepository.getTaskByIdentifier(task.reasonReference);
+        return followUpTask
+    }
+
 }

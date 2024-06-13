@@ -78,6 +78,9 @@ object Constants {
     }
 
 
+    /**
+     * Task constants used thought the application
+     */
     object Task {
 
         object Key {
@@ -85,6 +88,9 @@ object Constants {
             const val FOLLOW_UP_TASK = "follow_up_task"
         }
 
+        /**
+         * Task Status constants used thought the application
+         */
         object Status {
             const val DRAFT = "Draft"
             const val READY = "Ready"

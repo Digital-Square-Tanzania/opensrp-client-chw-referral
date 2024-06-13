@@ -56,8 +56,10 @@ object LocationUtils {
         return haystack.toLowerCase(Locale.ROOT).contains(this.toLowerCase(Locale.ROOT))
     }
 
+    /**
+     * Get list of facilities with their keys and names
+     */
     fun getFacilitiesKeyAndName(): Map<String, String> {
-        //TODO implement the function getLocationOfType(type="facility"):Location in the location Repository
         return LocationRepository().allLocations
             .filter { loc->LocationTagRepository().allLocationTags.any{it.locationId==loc.id && "facility".isIn(it.name)} }
             .associate {loc->loc.id to loc.properties.name}

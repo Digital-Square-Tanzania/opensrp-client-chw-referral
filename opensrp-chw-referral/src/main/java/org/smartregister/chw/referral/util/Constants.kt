@@ -81,7 +81,7 @@ object Constants {
     object Task {
 
         object Key {
-            const val TASK_ID = "TaskId"
+            const val TASK_ID = "taskId"
             const val FOLLOW_UP_TASK = "follow_up_task"
         }
 
@@ -127,6 +127,7 @@ object Constants {
     object EventType {
         const val REGISTRATION = "Referral Registration"
         const val REFERRAL_FOLLOW_UP_VISIT = "Followup Visit"
+        const val LINKAGE_FOLLOW_UP_VISIT = "Linkage Followup Visit"
     }
 
     /**
@@ -135,6 +136,7 @@ object Constants {
     object Forms {
         const val REFERRAL_REGISTRATION = "general_referral_form"
         const val REFERRAL_FOLLOW_UP_VISIT = "referral_followup_visit"
+        const val LINKAGE_FOLLOW_UP_VISIT = "linkage_followup_visit"
     }
 
     /**
@@ -209,6 +211,7 @@ object DBConstants {
         const val SERVICE_BEFORE_REFERRAL_OTHER = "service_before_referral_other"
         const val REFERRAL_TYPE = "referral_type"
         const val REFERRAL_STATUS = "referral_status"
+        const val STATUS = "status"
         const val NAME_EN = "name_en"
         const val NAME_SW = "name_sw"
         const val REFERRAL_SERVICE_IDENTIFIER = "identifier"

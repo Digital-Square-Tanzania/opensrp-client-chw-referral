@@ -26,6 +26,7 @@ import org.smartregister.chw.referral.ReferralLibrary
 import org.smartregister.chw.referral.contract.BaseReferralCallDialogContract
 import org.smartregister.chw.referral.contract.BaseReferralCallDialogContract.Dialer
 import org.smartregister.chw.referral.custom_views.ClipboardDialog
+import org.smartregister.chw.referral.dao.LinkageDao
 import org.smartregister.clientandeventmodel.Event
 import org.smartregister.domain.Task
 import org.smartregister.domain.db.EventClient
@@ -152,11 +153,15 @@ object Util : KoinComponent {
     /**
      * returns follow up task for the current referral/linkage task if present
      */
-    fun getFollowUpTask(taskId : String? ) : Task? {
+    fun getFollowUpTask(taskId : String?) : Task? {
         val taskRepository : TaskRepository by inject()
-        val task = taskRepository.getTaskByIdentifier(taskId);
-        val followUpTask = taskRepository.getTaskByIdentifier(task.reasonReference);
-        return followUpTask
+        taskId?.let {
+            val followUpTaskId = LinkageDao.getTaskIdByReasonReference(taskId)
+            followUpTaskId?.let{
+                return taskRepository.getTaskByIdentifier(it)
+            }
+        }
+        return null
     }
 
 }

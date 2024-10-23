@@ -20,7 +20,6 @@ import org.smartregister.chw.referral.util.Constants
 import org.smartregister.chw.referral.util.ReferralUtil
 import org.smartregister.view.activity.SecuredActivity
 import org.smartregister.view.customcontrols.CustomFontTextView
-import timber.log.Timber
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +38,8 @@ open class ReferralDetailsViewActivity : SecuredActivity() {
     private lateinit var referralFacility: CustomFontTextView
     private lateinit var preReferralManagement: CustomFontTextView
     private lateinit var referralType: CustomFontTextView
+    private lateinit var referralService: CustomFontTextView
+    private lateinit var referralPrescription: CustomFontTextView
     private lateinit var problemLayout: ViewGroup
     private lateinit var preManagementServicesServices: ViewGroup
     val baseEntityId: String? = null
@@ -85,6 +86,8 @@ open class ReferralDetailsViewActivity : SecuredActivity() {
         referralFacility = findViewById(R.id.referral_facility)
         preReferralManagement = findViewById(R.id.pre_referral_management)
         referralType = findViewById(R.id.referral_type)
+        referralService = findViewById(R.id.referral_service)
+        referralPrescription = findViewById(R.id.referral_prescription)
         problemLayout = findViewById(R.id.client_referral_problem_layout)
         preManagementServicesServices = findViewById(R.id.client_pre_referral_management_layout)
         obtainReferralDetails()
@@ -103,6 +106,22 @@ open class ReferralDetailsViewActivity : SecuredActivity() {
             referralFacility.text = it.chwReferralHf
             referralType.text =
                 ReferralUtil.getTranslatedReferralServiceType(this, it.chwReferralService!!)
+
+
+            val refServicesOffered = arrayOf("Service 1", "Service 2", "Service 3", "Service 4") // Use Dao to get data
+            val servcesList = StringBuilder()
+            for (item in refServicesOffered) {
+                servcesList.append(item).append("\n") // Add a newline after each item
+            }
+            referralService.text = servcesList.toString()
+
+            val refPrescribeOffered = arrayOf("Presciption 1", "Presciption 2", "Presciption 3", "Presciption 4") // Use Dao to get data
+            val prescriptionList = StringBuilder()
+            for (item in refPrescribeOffered) {
+                prescriptionList.append(item).append("\n") // Add a newline after each item
+            }
+            referralPrescription.text = prescriptionList.toString()
+
             if (!it.primaryCareGiver.isNullOrEmpty() && clientAge.toInt() < 5)
                 careGiverName.text = String.format("CG : %s", it.primaryCareGiver)
             else

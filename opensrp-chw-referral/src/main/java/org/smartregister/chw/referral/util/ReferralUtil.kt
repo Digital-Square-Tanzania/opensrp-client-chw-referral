@@ -133,6 +133,9 @@ object ReferralUtil {
             Constants.ReferralServiceType.ADDO.ADOLESCENT_MINOR_AILMENTS.toLowerCase(Locale.getDefault()) -> {
                 return context.getString(R.string.adolescent_minor_ailments)
             }
+            Constants.ReferralServiceType.VMMC.toLowerCase(Locale.getDefault()) -> {
+                return context.getString(R.string.vmmc_referral)
+            }
         }
         return type
     }

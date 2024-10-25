@@ -46,6 +46,7 @@ object Constants {
         const val STI_REFERRAL = "STI Services"
         const val AYSRH_FRIENDLY_SERVICES = "AYSRH Friendly Services"
         const val CECAP_REFERRAL = "Reproductive Cancer Services";
+        const val VMMC = "VMMC";
 
         /**
          *  Linkage service constants for linking to ADDO
@@ -53,7 +54,7 @@ object Constants {
         object ADDO {
             const val CHILD_MINOR_AILMENTS = "Child Minor Ailments"
             const val ANC_MINOR_AILMENTS = "ANC Minor Ailments"
-            const val PNC_MINOR_AILMENTS = "ANC Minor Ailments"
+            const val PNC_MINOR_AILMENTS = "PNC Minor Ailments"
             const val ADOLESCENT_MINOR_AILMENTS = "Adolescent Minor Ailments"
         }
 

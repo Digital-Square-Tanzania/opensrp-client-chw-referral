@@ -10,7 +10,6 @@ import java.util.Locale
 /**
  * Utility class for location-related operations.
  */
-@Suppress("unused")
 object LocationUtils {
 
     private fun getParentLocationIdWithTags(

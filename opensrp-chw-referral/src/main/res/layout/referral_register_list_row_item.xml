@@ -147,7 +147,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@color/colorRed"
+        android:background="@color/transparent"
         android:paddingStart="@dimen/register_list_item_padding"
         android:paddingLeft="@dimen/register_list_item_padding"
         android:paddingTop="@dimen/register_list_top_bottom_padding"
@@ -168,8 +168,8 @@
             android:hapticFeedbackEnabled="true"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textAllCaps="true"
+            android:textColor="@color/visit_status_ok"
             android:text="Follow Up"
             android:textSize="@dimen/referral_register_list_due_size" />
 

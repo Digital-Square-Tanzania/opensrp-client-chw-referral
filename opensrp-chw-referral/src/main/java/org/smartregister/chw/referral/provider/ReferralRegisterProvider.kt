@@ -156,6 +156,9 @@ open class ReferralRegisterProvider(
                             setTag(R.id.VIEW_ID, BaseReferralRegisterFragment.LINKAGE_FOLLOWUP)
                             setTag(R.id.FOLLOW_UP_TASK, task )
                         }
+                        followUpButton.apply {
+                            setBackgroundResource(R.drawable.btn_button_selector)
+                        }
                     }else{
                         //Follow up task is already followed up on
                         followUpWrapper.visibility = View.INVISIBLE
@@ -209,6 +212,7 @@ open class ReferralRegisterProvider(
         var registerColumns: View = itemView.findViewById(R.id.register_columns)
         var dueWrapper: View = itemView.findViewById(R.id.due_button_wrapper)
         var followUpWrapper: View = itemView.findViewById(R.id.followup_button_wrapper);
+        var followUpButton: View = itemView.findViewById(R.id.text_view_follow_up);
     }
 
     open inner class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view) {

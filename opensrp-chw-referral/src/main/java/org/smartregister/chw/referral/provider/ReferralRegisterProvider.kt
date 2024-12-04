@@ -160,18 +160,35 @@ open class ReferralRegisterProvider(
                         //Follow up task is already followed up on
                         followUpWrapper.visibility = View.INVISIBLE
                         val statusValue = Utils.getValue(pc.columnmaps, DBConstants.Key.STATUS, true)
-                        setReferralStatusColor( context, textReferralStatus, statusValue)
+                        SetLinkageStatusColor( context, textReferralStatus, statusValue)
                     }
                 }
                 task?:let {
                     //Follow up task is not available
                     followUpWrapper.visibility = View.INVISIBLE
                     val statusValue = Utils.getValue(pc.columnmaps, DBConstants.Key.STATUS, true)
-                    setReferralStatusColor(context, textReferralStatus, statusValue)
+                    SetLinkageStatusColor(context, textReferralStatus, statusValue)
                 }
             }
         } catch (e: IllegalStateException) {
             Timber.e(e)
+        }
+    }
+
+    private fun SetLinkageStatusColor(context: Context, textViewStatus: TextView, status: String){
+        when (status) {
+            "READY" -> {
+                textViewStatus.setTextColor(
+                    ContextCompat.getColor(context, R.color.alert_in_progress_blue)
+                )
+                textViewStatus.text = context.getString(R.string.referral_status_pending)
+            }
+            "COMPLETED" -> {
+                textViewStatus.setTextColor(
+                    ContextCompat.getColor(context, R.color.alert_complete_green)
+                )
+                textViewStatus.text = context.getString(R.string.referral_status_successful)
+            }
         }
     }
 

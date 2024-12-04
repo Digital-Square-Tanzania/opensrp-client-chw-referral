@@ -1,1 +1,1 @@
-include ':opensrp-chw-referral'
+include ':sample', ':opensrp-chw-referral'

@@ -134,7 +134,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                             if (!isAddoLinkage) {
                                 Toast.makeText(
                                         applicationContext,
-                                        getString(R.string.referral_submitted_successfully),
+                                        getString(R.string.referral_library_submitted_successfully),
                                         Toast.LENGTH_LONG
                                 ).show()
                             } else {

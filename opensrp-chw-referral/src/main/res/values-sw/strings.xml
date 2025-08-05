@@ -71,6 +71,7 @@
     <string name="missing_services">Tafadhali jaza huduma ya rufaa</string>
     <string name="wrong_facility">Tafadhali jaza kituo sahihi cha kutolea huduma za fya</string>
     <string name="referral_submitted_successfully">Rufaa imetumwa katika kituo cha kutolea huduma za afya</string>
+    <string name="referral_library_submitted_successfully">Rufaa imetumwa katika kituo cha kutolea huduma za afya</string>
     <string name="missing_client_condition_during_visit">Tafadhali jaza hali ya mteja wakati wa tembeleo</string>
     <string name="missing_feedback">Tafadhali chagua mrejesho</string>
     <string name="complete">Kamilisha</string>

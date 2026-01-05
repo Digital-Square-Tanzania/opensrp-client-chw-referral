@@ -36,6 +36,7 @@ object Constants {
         const val FP_SIDE_EFFECTS = "FP Initiation"
         const val SUSPECTED_MALARIA = "Suspected Malaria"
         const val SUSPECTED_HIV = "Suspected HIV"
+        const val CONVENTIONAL_HIV_TEST = "Conventional HIV Test"
         const val SUSPECTED_TB = "Suspected TB"
         const val SUSPECTED_GBV = "Suspected GBV"
         const val SUSPECTED_CHILD_GBV = "Suspected Child GBV"

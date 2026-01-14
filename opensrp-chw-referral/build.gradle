@@ -212,7 +212,7 @@ dependencies {
 
     api('com.github.chivorns.androidx:smartmaterialspinner:1.2.1')
 
-    api('org.smartregister:opensrp-client-core:1.16.5-NACP-SNAPSHOT') {
+    api('org.smartregister:opensrp-client-core:1.17.1-MOH-SNAPSHOT') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'

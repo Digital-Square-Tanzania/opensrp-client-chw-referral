@@ -12,7 +12,6 @@ import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormEmbedded
-import kotlinx.android.synthetic.main.activity_referral_registration.*
 import org.joda.time.DateTime
 import org.joda.time.Period
 import org.json.JSONArray
@@ -33,6 +32,7 @@ import org.smartregister.chw.referral.presenter.BaseIssueReferralPresenter
 import org.smartregister.chw.referral.util.Constants
 import org.smartregister.chw.referral.util.JsonFormConstants
 import org.smartregister.chw.referral.util.JsonFormUtils.addFormMetadata
+import org.smartregister.chw.referral.databinding.ActivityReferralRegistrationBinding
 import org.smartregister.commonregistry.CommonPersonObjectClient
 import org.smartregister.view.activity.SecuredActivity
 import timber.log.Timber
@@ -59,6 +59,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
     private var jsonForm: JSONObject? = null
     private val referralLibrary by inject<ReferralLibrary>()
     private var useCustomLayout = false
+    private lateinit var binding: ActivityReferralRegistrationBinding
 
     private var isAddoLinkage: Boolean =  false
 
@@ -67,7 +68,8 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                 .getPreference(AllConstants.CURRENT_LOCATION_ID)
 
     override fun onCreation() {
-        setContentView(R.layout.activity_referral_registration)
+        binding = ActivityReferralRegistrationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         with(this.intent) {
             baseEntityId = getStringExtra(Constants.ActivityPayload.BASE_ENTITY_ID)
             serviceId = getStringExtra(Constants.ActivityPayload.REFERRAL_SERVICE_IDS)
@@ -94,15 +96,15 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
 
             with(viewModel?.memberObject!!) {
                 val age = Period(DateTime(this.age), DateTime()).years
-                clientNameTitleTextView.text =
+                binding.clientNameTitleTextView.text =
                         "${this.firstName} ${this.middleName} ${this.lastName}, $age"
 
-                pageTitleTextView.text =
+                binding.pageTitleTextView.text =
                         jsonForm?.getJSONArray("steps")?.getJSONObject(0)?.getString("title")
                                 ?: "Referral Form"
             }
 
-            exitFormImageView.setOnClickListener {
+            binding.exitFormImageView.setOnClickListener {
                 if (it.id == R.id.exitFormImageView) {
                     AlertDialog.Builder(this@BaseIssueReferralActivity, R.style.AlertDialogTheme)
                             .setTitle(getString(R.string.confirm_form_close))
@@ -115,7 +117,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                 }
             }
 
-            completeButton.setOnClickListener {
+            binding.completeButton.setOnClickListener {
                 if (it.id == R.id.completeButton) {
                     if (formBuilder?.getFormDataAsJson() != "") {
 
@@ -178,7 +180,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                 Timber.i("FormBuilder :: Loading form builder")
                 Timber.i("FormBuilder :: loaded json = %s", it)
                 formBuilder = JsonFormBuilder(it.toString(), this)
-                JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout)
+                JsonFormEmbedded(formBuilder as JsonFormBuilder, binding.formLayout)
                         .buildForm(if (useCustomLayout) customLayouts else null)
             }
 

@@ -44,6 +44,7 @@ android.with {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        buildConfigField "boolean", "ENABLE_REFERRAL_FOLLOWUP", "false"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -99,6 +100,7 @@ android.with {
 
     buildFeatures {
         dataBinding true
+        buildConfig true
     }
 
 }

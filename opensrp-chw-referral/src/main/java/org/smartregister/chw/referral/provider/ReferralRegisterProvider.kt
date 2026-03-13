@@ -13,6 +13,7 @@ import org.joda.time.DateTime
 import org.joda.time.Period
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import org.smartregister.chw.referral.BuildConfig
 import org.smartregister.chw.referral.R
 import org.smartregister.chw.referral.fragment.BaseReferralRegisterFragment
 import org.smartregister.chw.referral.util.Constants
@@ -148,21 +149,30 @@ open class ReferralRegisterProvider(
                 val taskId = Utils.getValue(pc.columnmaps, Constants.Task.Key.TASK_ID, false)
                 val task = resolveFollowUpTask(taskId)
 
-                if (task?.status == Task.TaskStatus.READY) {
-                    // Follow up task is available and not followed up on.
-                    followUpWrapper.apply {
-                        visibility = View.VISIBLE
-                        setOnClickListener(onClickListener)
-                        tag = pc
-                        setTag(R.id.VIEW_ID, BaseReferralRegisterFragment.LINKAGE_FOLLOWUP)
-                        setTag(R.id.FOLLOW_UP_TASK, task)
+                if (BuildConfig.ENABLE_REFERRAL_FOLLOWUP) {
+                    if (task?.status == Task.TaskStatus.READY) {
+                        // Follow up task is available and not followed up on.
+                        followUpWrapper.apply {
+                            visibility = View.VISIBLE
+                            setOnClickListener(onClickListener)
+                            tag = pc
+                            setTag(R.id.VIEW_ID, BaseReferralRegisterFragment.LINKAGE_FOLLOWUP)
+                            setTag(R.id.FOLLOW_UP_TASK, task)
+                        }
+                    } else {
+                        // Follow up task is missing or already followed up on.
+                        followUpWrapper.visibility = View.INVISIBLE
+                        val statusValue = Utils.getValue(pc.columnmaps, DBConstants.Key.STATUS, true)
+                        setReferralStatusColor(context, textReferralStatus, statusValue)
                     }
                 } else {
-                    // Follow up task is missing or already followed up on.
                     followUpWrapper.visibility = View.INVISIBLE
-                    val statusValue = Utils.getValue(pc.columnmaps, DBConstants.Key.STATUS, true)
-                    setReferralStatusColor(context, textReferralStatus, statusValue)
+                    dueWrapper.visibility = View.VISIBLE
+                    if (task != null) {
+                        setReferralStatusColor(context, textReferralStatus, task.businessStatus)
+                    }
                 }
+                Unit
             }
         } catch (e: IllegalStateException) {
             Timber.e(e)
@@ -189,7 +199,7 @@ open class ReferralRegisterProvider(
                 )
                 textViewStatus.text = context.getString(R.string.referral_status_failed)
             }
-            Constants.Task.Status.COMPLETED -> {
+            Constants.BusinessStatus.COMPLETE -> {
                 textViewStatus.setTextColor(
                         ContextCompat.getColor(context, R.color.alert_complete_green)
                 )

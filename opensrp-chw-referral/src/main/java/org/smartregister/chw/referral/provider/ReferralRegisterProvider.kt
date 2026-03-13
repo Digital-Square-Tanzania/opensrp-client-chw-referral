@@ -9,9 +9,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.nerdstone.neatformcore.utils.isNotNull
 import org.joda.time.DateTime
 import org.joda.time.Period
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.smartregister.chw.referral.R
 import org.smartregister.chw.referral.fragment.BaseReferralRegisterFragment
 import org.smartregister.chw.referral.util.Constants
@@ -21,6 +22,7 @@ import org.smartregister.chw.referral.util.Util
 import org.smartregister.commonregistry.CommonPersonObjectClient
 import org.smartregister.cursoradapter.RecyclerViewProvider
 import org.smartregister.domain.Task
+import org.smartregister.repository.TaskRepository
 import org.smartregister.util.Utils
 import org.smartregister.view.contract.SmartRegisterClient
 import org.smartregister.view.dialog.FilterOption
@@ -35,10 +37,11 @@ open class ReferralRegisterProvider(
         private val context: Context, private val paginationClickListener: View.OnClickListener,
         private var onClickListener: View.OnClickListener,
         private val visibleColumns: Set<ConfigurableView>?
-) : RecyclerViewProvider<ReferralRegisterProvider.RegisterViewHolder> {
+) : RecyclerViewProvider<ReferralRegisterProvider.RegisterViewHolder>, KoinComponent {
 
     private val inflater =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val taskRepository: TaskRepository by inject()
 
     override fun getView(
             cursor: Cursor, smartRegisterClient: SmartRegisterClient,
@@ -142,29 +145,20 @@ open class ReferralRegisterProvider(
                         Utils.getValue(pc.columnmaps, DBConstants.Key.REFERRAL_STATUS, true)
                 )
 
-                val taskId = Utils.getValue(pc.columnmaps, Constants.Task.Key.TASK_ID, false);
+                val taskId = Utils.getValue(pc.columnmaps, Constants.Task.Key.TASK_ID, false)
+                val task = resolveFollowUpTask(taskId)
 
-                val task = Util.getFollowUpTask(taskId)
-
-                task?.let {
-                    if (it.status == Task.TaskStatus.READY){
-                        //Follow up task is available and not followed up on
-                        followUpWrapper.apply {
-                            visibility = View.VISIBLE
-                            setOnClickListener(onClickListener)
-                            tag = pc
-                            setTag(R.id.VIEW_ID, BaseReferralRegisterFragment.LINKAGE_FOLLOWUP)
-                            setTag(R.id.FOLLOW_UP_TASK, task )
-                        }
-                    }else{
-                        //Follow up task is already followed up on
-                        followUpWrapper.visibility = View.INVISIBLE
-                        val statusValue = Utils.getValue(pc.columnmaps, DBConstants.Key.STATUS, true)
-                        setReferralStatusColor( context, textReferralStatus, statusValue)
+                if (task?.status == Task.TaskStatus.READY) {
+                    // Follow up task is available and not followed up on.
+                    followUpWrapper.apply {
+                        visibility = View.VISIBLE
+                        setOnClickListener(onClickListener)
+                        tag = pc
+                        setTag(R.id.VIEW_ID, BaseReferralRegisterFragment.LINKAGE_FOLLOWUP)
+                        setTag(R.id.FOLLOW_UP_TASK, task)
                     }
-                }
-                task?:let {
-                    //Follow up task is not available
+                } else {
+                    // Follow up task is missing or already followed up on.
                     followUpWrapper.visibility = View.INVISIBLE
                     val statusValue = Utils.getValue(pc.columnmaps, DBConstants.Key.STATUS, true)
                     setReferralStatusColor(context, textReferralStatus, statusValue)
@@ -173,6 +167,12 @@ open class ReferralRegisterProvider(
         } catch (e: IllegalStateException) {
             Timber.e(e)
         }
+    }
+
+    private fun resolveFollowUpTask(taskId: String?): Task? {
+        val resolvedTaskId = taskId?.takeIf { it.isNotBlank() } ?: return null
+        return Util.getFollowUpTask(resolvedTaskId)
+                ?: taskRepository.getTaskByIdentifier(resolvedTaskId)
     }
 
     private fun setReferralStatusColor(context: Context, textViewStatus: TextView, status: String) {

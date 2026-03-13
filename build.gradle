@@ -1,77 +1,48 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '7.0.4' apply false
+    id 'com.android.library' version '7.0.4' apply false
+    id 'org.jetbrains.kotlin.android' version '1.5.31' apply false
+    id 'io.codearte.nexus-staging' version '0.11.0'
+}
 
-apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'io.codearte.nexus-staging'
-
-project.ext.preDexLibs = !project.hasProperty('disablePreDex')
-
-buildscript {
-    ext.kotlinVersion = '1.4.0'
-    ext.koinVersion = '2.0.1'
-    ext.espressoVersion = '3.2.0'
-    ext.dokkaVersion = '0.10.1'
-    repositories {
-        google()
-        jcenter()
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath 'gradle.plugin.org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.10.2'
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}"
-        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
+ext {
+    kotlinVersion = '1.5.31'
+    koinVersion = '2.0.1'
+    espressoVersion = '3.2.0'
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        jcenter()
         mavenLocal()
         maven { url 'https://jitpack.io' }
-        maven { url "http://acra.googlecode.com/svn/repository/releases" }
+        maven {
+            url "http://acra.googlecode.com/svn/repository/releases"
+            allowInsecureProtocol = true
+        }
         maven { url "https://repo.maven.apache.org/maven2" }
-        maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
+        maven {
+            url "http://cloudant.github.io/cloudant-sync-eap/repository"
+            allowInsecureProtocol = true
+        }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://plugins.gradle.org/m2/" }
     }
 }
+
 subprojects {
-    ext.androidBuildToolsVersion = '29.0.3'
-    // Improve build server performance by allowing disabling of pre-dexing
-    // (see http://tools.android.com/tech-docs/new-build-system/tips#TOC-Improving-Build-Server-performance.)
-    project.plugins.whenPluginAdded { plugin ->
-        if ("com.android.build.gradle.AppPlugin".equals(plugin.class.name)) {
-            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
-        } else if ("com.android.build.gradle.LibraryPlugin".equals(plugin.class.name)) {
-            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
-        }
-    }
+    ext.androidBuildToolsVersion = '30.0.3'
 }
 
 configure(allprojects) { project ->
-
     version = VERSION_NAME
     group = GROUP
-    buildscript {
-        repositories {
-            google()
-            jcenter()
-            mavenCentral()
-            maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-            mavenLocal()
-            maven { url "https://plugins.gradle.org/m2/" }
-        }
-    }
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
 

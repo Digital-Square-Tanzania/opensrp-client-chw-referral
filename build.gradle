@@ -1,33 +1,21 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '7.0.4' apply false
+    id 'com.android.library' version '7.0.4' apply false
+    id 'org.jetbrains.kotlin.android' version '1.5.31' apply false
+    id 'io.codearte.nexus-staging' version '0.11.0'
+}
 
-apply plugin: 'com.github.kt3k.coveralls'
-
-buildscript {
-    ext.kotlinVersion = '1.8.22'
-    ext.koinVersion = '2.0.1'
-    ext.espressoVersion = '3.2.0'
-    ext.dokkaVersion = '0.10.1'
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath 'gradle.plugin.org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.10.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}"
-        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.5'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
+ext {
+    kotlinVersion = '1.5.31'
+    koinVersion = '2.0.1'
+    espressoVersion = '3.2.0'
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        jcenter()
         mavenLocal()
         maven { url 'https://jitpack.io' }
         maven {
@@ -44,50 +32,17 @@ allprojects {
         maven { url "https://plugins.gradle.org/m2/" }
     }
 }
+
 subprojects {
-    ext.androidBuildToolsVersion = '33.0.2'
-
-    configurations.all {
-        exclude group: 'com.google.guava', module: 'listenablefuture'
-
-        resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == "com.google.android.gms" &&
-                    details.requested.name.startsWith("play-services-measurement")) {
-                details.useVersion "21.3.0"
-            }
-            if (details.requested.group == "org.jetbrains.kotlin" &&
-                    details.requested.name.startsWith("kotlin-stdlib")) {
-                details.useVersion kotlinVersion
-            }
-        }
-    }
-
-    tasks.matching { it.name.toLowerCase().startsWith("lint") }.configureEach {
-        enabled = false
-    }
-
-    tasks.withType(Test).configureEach {
-        enabled = false
-    }
+    ext.androidBuildToolsVersion = '30.0.3'
 }
 
 configure(allprojects) { project ->
-
     version = VERSION_NAME
     group = GROUP
-    buildscript {
-        repositories {
-            google()
-            jcenter()
-            mavenCentral()
-            maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-            mavenLocal()
-            maven { url "https://plugins.gradle.org/m2/" }
-        }
-    }
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
 

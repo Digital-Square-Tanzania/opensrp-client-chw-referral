@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = "0.8.0"
+    toolVersion = "0.8.10"
 }
 
 def githubProperties = new Properties()
@@ -26,9 +25,15 @@ allprojects {
 
         maven { url 'https://maven.google.com' }
         maven { url 'https://jitpack.io' }
-        maven { url "https://acra.googlecode.com/svn/repository/releases" }
+        maven {
+            url "http://acra.googlecode.com/svn/repository/releases"
+            allowInsecureProtocol = true
+        }
         maven { url "https://repo.maven.apache.org/maven2" }
-        maven { url "https://cloudant.github.io/cloudant-sync-eap/repository" }
+        maven {
+            url "http://cloudant.github.io/cloudant-sync-eap/repository"
+            allowInsecureProtocol = true
+        }
         maven { url 'https://maven.fabric.io/public' }
         maven{  url "https://plugins.gradle.org/m2/" }
 
@@ -60,23 +65,20 @@ allprojects {
 
 android {
 
-    compileSdkVersion 29
+    compileSdkVersion 33
     buildToolsVersion androidBuildToolsVersion
 
+    namespace "org.smartregister.chw.referral"
+
     defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion 29
+        minSdkVersion 26
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-        javaCompileOptions {
-            annotationProcessorOptions {
-                includeCompileClasspath true
-            }
-        }
     }
 
     buildTypes {
@@ -87,14 +89,9 @@ android {
         debug {
             testCoverageEnabled true
             minifyEnabled false
-            useProguard false
         }
     }
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
-
-    lintOptions {
+    lint {
         abortOnError false
     }
 
@@ -118,7 +115,8 @@ android {
         }
         unitTests.all {
             jacoco {
-                includeNoLocationClasses = true
+                enabled = false
+                includeNoLocationClasses = false
             }
         }
         animationsDisabled = true
@@ -126,16 +124,23 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += ["-Xskip-metadata-version-check"]
     }
 
 }
 
 tasks.withType(Test) {
-    jacoco.includeNoLocationClasses = true
+    jacoco.includeNoLocationClasses = false
 }
 def getVersionName = { ->
     return VERSION_NAME // Library version
@@ -212,7 +217,7 @@ dependencies {
 
     api('com.github.chivorns.androidx:smartmaterialspinner:1.2.1')
 
-    api('org.smartregister:opensrp-client-core:1.16.5-NACP-SNAPSHOT') {
+    api('org.smartregister:opensrp-client-core:1.17.1-MOH-SNAPSHOT') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
@@ -251,7 +256,7 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.core:core-ktx:1.3.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     // compatibility issue when upgraded to 1.1.*
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -262,8 +267,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.code.reflection-utils:reflection-utils:0.0.1'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
-    // compatibility issue when upgraded to 2.2.*
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     // compatibility issue when upgraded to 24.*
     implementation 'com.google.guava:guava:20.0'
     implementation 'id.zelory:compressor:2.1.1'
@@ -274,20 +279,22 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3.1'
     testImplementation "org.robolectric:shadows-multidex:4.3.1"
-    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'androidx.test:core:1.5.0'
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.2'
     testImplementation 'com.agoda.kakao:kakao:2.2.0'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
 
     annotationProcessor 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
-    configurations.all {
-        resolutionStrategy.force 'com.android.support:support-annotations:23.1.0'
-    }
+}
+
+configurations.all {
+    exclude group: 'com.google.guava', module: 'listenablefuture'
 }
 
 tasks.coveralls {
@@ -314,6 +321,3 @@ dokka {
     }
 
 }
-
-apply from: '../maven.gradle'
-

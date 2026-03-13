@@ -5,6 +5,9 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.view.View
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
@@ -13,7 +16,6 @@ import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormEmbedded
-import kotlinx.android.synthetic.main.activity_referral_registration.*
 import org.joda.time.DateTime
 import org.joda.time.Period
 import org.json.JSONArray
@@ -60,6 +62,11 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
     private var jsonForm: JSONObject? = null
     private val referralLibrary by inject<ReferralLibrary>()
     private var useCustomLayout = false
+    private lateinit var clientNameTitleTextView: TextView
+    private lateinit var pageTitleTextView: TextView
+    private lateinit var exitFormImageView: ImageButton
+    private lateinit var completeButton: ImageButton
+    private lateinit var formLayout: LinearLayout
 
     private var isAddoLinkage: Boolean =  false
 
@@ -69,6 +76,11 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
 
     override fun onCreation() {
         setContentView(R.layout.activity_referral_registration)
+        clientNameTitleTextView = findViewById(R.id.clientNameTitleTextView)
+        pageTitleTextView = findViewById(R.id.pageTitleTextView)
+        exitFormImageView = findViewById(R.id.exitFormImageView)
+        completeButton = findViewById(R.id.completeButton)
+        formLayout = findViewById(R.id.formLayout)
         with(this.intent) {
             baseEntityId = getStringExtra(Constants.ActivityPayload.BASE_ENTITY_ID)
             serviceId = getStringExtra(Constants.ActivityPayload.REFERRAL_SERVICE_IDS)

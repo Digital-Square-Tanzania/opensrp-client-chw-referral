@@ -36,6 +36,7 @@ object Constants {
         const val FP_SIDE_EFFECTS = "FP Initiation"
         const val SUSPECTED_MALARIA = "Suspected Malaria"
         const val SUSPECTED_HIV = "Suspected HIV"
+        const val CONVENTIONAL_HIV_TEST = "Conventional HIV Test"
         const val SUSPECTED_TB = "Suspected TB"
         const val SUSPECTED_GBV = "Suspected GBV"
         const val SUSPECTED_CHILD_GBV = "Suspected Child GBV"
@@ -46,6 +47,7 @@ object Constants {
         const val STI_REFERRAL = "STI Services"
         const val AYSRH_FRIENDLY_SERVICES = "AYSRH Friendly Services"
         const val CECAP_REFERRAL = "Reproductive Cancer Services";
+        const val VMMC = "VMMC";
 
         /**
          *  Linkage service constants for linking to ADDO
@@ -53,7 +55,7 @@ object Constants {
         object ADDO {
             const val CHILD_MINOR_AILMENTS = "Child Minor Ailments"
             const val ANC_MINOR_AILMENTS = "ANC Minor Ailments"
-            const val PNC_MINOR_AILMENTS = "ANC Minor Ailments"
+            const val PNC_MINOR_AILMENTS = "PNC Minor Ailments"
             const val ADOLESCENT_MINOR_AILMENTS = "Adolescent Minor Ailments"
         }
 
@@ -65,6 +67,7 @@ object Constants {
     object ReferralType {
         const val COMMUNITY_TO_FACILITY_REFERRAL = "community_to_facility_referral"
         const val FACILITY_TO_COMMUNITY_REFERRAL = "facility_to_community_referral"
+        const val COMMUNITY_TO_ADDO_REFERRAL = "community_to_addo_referral"
     }
 
     /**
@@ -76,6 +79,32 @@ object Constants {
         const val COMPLETE = "Complete"
         const val EXPIRED = "Expired"
         const val LINKED = "Linked"
+    }
+
+
+    /**
+     * Task constants used thought the application
+     */
+    object Task {
+
+        object Key {
+            const val TASK_ID = "taskId"
+            const val FOLLOW_UP_TASK = "follow_up_task"
+        }
+
+        /**
+         * Task Status constants used thought the application
+         */
+        object Status {
+            const val DRAFT = "Draft"
+            const val READY = "Ready"
+            const val CANCELLED = "Cancelled"
+            const val IN_PROGRESS = "In-Progress"
+            const val COMPLETED = "COMPLETED"
+            const val FAILED = "FAILED"
+            const val ARCHIVED = "ARCHIVED"
+            const val EXPIRED = "EXPIRED"
+        }
     }
 
     /**
@@ -108,6 +137,7 @@ object Constants {
     object EventType {
         const val REGISTRATION = "Referral Registration"
         const val REFERRAL_FOLLOW_UP_VISIT = "Followup Visit"
+        const val LINKAGE_FOLLOW_UP_VISIT = "Linkage Followup Visit"
     }
 
     /**
@@ -116,6 +146,7 @@ object Constants {
     object Forms {
         const val REFERRAL_REGISTRATION = "general_referral_form"
         const val REFERRAL_FOLLOW_UP_VISIT = "referral_followup_visit"
+        const val LINKAGE_FOLLOW_UP_VISIT = "linkage_followup_visit"
     }
 
     /**
@@ -190,6 +221,7 @@ object DBConstants {
         const val SERVICE_BEFORE_REFERRAL_OTHER = "service_before_referral_other"
         const val REFERRAL_TYPE = "referral_type"
         const val REFERRAL_STATUS = "referral_status"
+        const val STATUS = "status"
         const val NAME_EN = "name_en"
         const val NAME_SW = "name_sw"
         const val REFERRAL_SERVICE_IDENTIFIER = "identifier"

@@ -5,13 +5,9 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.view.View
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
-import com.nerdstone.neatandroidstepper.core.domain.StepperActions
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
@@ -36,6 +32,7 @@ import org.smartregister.chw.referral.presenter.BaseIssueReferralPresenter
 import org.smartregister.chw.referral.util.Constants
 import org.smartregister.chw.referral.util.JsonFormConstants
 import org.smartregister.chw.referral.util.JsonFormUtils.addFormMetadata
+import org.smartregister.chw.referral.databinding.ActivityReferralRegistrationBinding
 import org.smartregister.commonregistry.CommonPersonObjectClient
 import org.smartregister.view.activity.SecuredActivity
 import timber.log.Timber
@@ -62,11 +59,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
     private var jsonForm: JSONObject? = null
     private val referralLibrary by inject<ReferralLibrary>()
     private var useCustomLayout = false
-    private lateinit var clientNameTitleTextView: TextView
-    private lateinit var pageTitleTextView: TextView
-    private lateinit var exitFormImageView: ImageButton
-    private lateinit var completeButton: ImageButton
-    private lateinit var formLayout: LinearLayout
+    private lateinit var binding: ActivityReferralRegistrationBinding
 
     private var isAddoLinkage: Boolean =  false
 
@@ -75,12 +68,8 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                 .getPreference(AllConstants.CURRENT_LOCATION_ID)
 
     override fun onCreation() {
-        setContentView(R.layout.activity_referral_registration)
-        clientNameTitleTextView = findViewById(R.id.clientNameTitleTextView)
-        pageTitleTextView = findViewById(R.id.pageTitleTextView)
-        exitFormImageView = findViewById(R.id.exitFormImageView)
-        completeButton = findViewById(R.id.completeButton)
-        formLayout = findViewById(R.id.formLayout)
+        binding = ActivityReferralRegistrationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         with(this.intent) {
             baseEntityId = getStringExtra(Constants.ActivityPayload.BASE_ENTITY_ID)
             serviceId = getStringExtra(Constants.ActivityPayload.REFERRAL_SERVICE_IDS)
@@ -107,15 +96,15 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
 
             with(viewModel?.memberObject!!) {
                 val age = Period(DateTime(this.age), DateTime()).years
-                clientNameTitleTextView.text =
+                binding.clientNameTitleTextView.text =
                         "${this.firstName} ${this.middleName} ${this.lastName}, $age"
 
-                pageTitleTextView.text =
+                binding.pageTitleTextView.text =
                         jsonForm?.getJSONArray("steps")?.getJSONObject(0)?.getString("title")
                                 ?: "Referral Form"
             }
 
-            exitFormImageView.setOnClickListener {
+            binding.exitFormImageView.setOnClickListener {
                 if (it.id == R.id.exitFormImageView) {
                     AlertDialog.Builder(this@BaseIssueReferralActivity, R.style.AlertDialogTheme)
                             .setTitle(getString(R.string.confirm_form_close))
@@ -128,7 +117,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                 }
             }
 
-            completeButton.setOnClickListener {
+            binding.completeButton.setOnClickListener {
                 if (it.id == R.id.completeButton) {
                     if (formBuilder?.getFormDataAsJson() != "") {
 
@@ -147,7 +136,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                             if (!isAddoLinkage) {
                                 Toast.makeText(
                                         applicationContext,
-                                        getString(R.string.referral_submitted_successfully),
+                                        getString(R.string.referral_library_submitted_successfully),
                                         Toast.LENGTH_LONG
                                 ).show()
                             } else {
@@ -191,7 +180,7 @@ open class BaseIssueReferralActivity : SecuredActivity(), BaseIssueReferralContr
                 Timber.i("FormBuilder :: Loading form builder")
                 Timber.i("FormBuilder :: loaded json = %s", it)
                 formBuilder = JsonFormBuilder(it.toString(), this)
-                JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout)
+                JsonFormEmbedded(formBuilder as JsonFormBuilder, binding.formLayout)
                         .buildForm(if (useCustomLayout) customLayouts else null)
             }
 

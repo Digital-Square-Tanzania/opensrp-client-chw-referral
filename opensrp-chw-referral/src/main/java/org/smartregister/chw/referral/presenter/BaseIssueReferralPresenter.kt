@@ -17,13 +17,12 @@ import org.smartregister.chw.referral.util.DBConstants
 import org.smartregister.util.Utils
 import timber.log.Timber
 import java.lang.ref.WeakReference
-import java.util.*
 
 open class BaseIssueReferralPresenter(
-        val baseEntityID: String,
-        view: BaseIssueReferralContract.View,
-        private val viewModelClass: Class<out AbstractIssueReferralModel>,
-        protected var interactor: BaseIssueReferralContract.Interactor
+    val baseEntityID: String,
+    view: BaseIssueReferralContract.View,
+    private val viewModelClass: Class<out AbstractIssueReferralModel>,
+    protected var interactor: BaseIssueReferralContract.Interactor
 ) : BaseIssueReferralContract.Presenter, BaseIssueReferralContract.InteractorCallBack {
 
     var memberObject: MemberObject? = null
@@ -38,7 +37,7 @@ open class BaseIssueReferralPresenter(
     }
 
     override fun getMainCondition() =
-            "${Constants.Tables.FAMILY_MEMBER}.${DBConstants.Key.BASE_ENTITY_ID}  = '$baseEntityID'"
+        "${Constants.Tables.FAMILY_MEMBER}.${DBConstants.Key.BASE_ENTITY_ID}  = '$baseEntityID'"
 
     override fun getMainTable() = Constants.Tables.FAMILY_MEMBER
 
@@ -52,9 +51,19 @@ open class BaseIssueReferralPresenter(
         this.memberObject = memberObject
     }
 
-    override fun saveForm(valuesHashMap: HashMap<String, NFormViewData>, jsonObject: JSONObject, isAddoLinkage: Boolean) {
+    override fun saveForm(
+        valuesHashMap: HashMap<String, NFormViewData>,
+        jsonObject: JSONObject,
+        isAddoLinkage: Boolean
+    ) {
         try {
-            interactor.saveRegistration(baseEntityID, valuesHashMap, jsonObject, this, isAddoLinkage)
+            interactor.saveRegistration(
+                baseEntityID,
+                valuesHashMap,
+                jsonObject,
+                this,
+                isAddoLinkage
+            )
         } catch (e: JSONException) {
             Timber.e(Log.getStackTraceString(e))
         } catch (e: SQLiteException) {
@@ -68,13 +77,21 @@ open class BaseIssueReferralPresenter(
 
     override fun onRegistrationSaved(saveSuccessful: Boolean) {
         val context = getView() as Activity
-        val messageId = if (saveSuccessful) R.string.referral_submitted else R.string.referral_not_submitted
+        val messageId =
+            if (saveSuccessful) R.string.referral_submitted else R.string.referral_not_submitted
         Utils.showToast(context, context.getString(messageId))
     }
 
     override fun onRegistrationSaved(saveSuccessful: Boolean, isAddoLinkage: Boolean) {
         val context = getView() as Activity
-        val messageId = if (saveSuccessful) R.string.linkage_submitted else R.string.linkage_not_submitted
+
+        val messageId: Int = when {
+            isAddoLinkage && saveSuccessful -> R.string.addo_linkage_submitted_successfully
+            isAddoLinkage -> R.string.linkage_not_submitted
+            saveSuccessful -> R.string.referral_submitted
+            else -> R.string.referral_not_submitted
+        }
+
         Utils.showToast(context, context.getString(messageId))
     }
 }

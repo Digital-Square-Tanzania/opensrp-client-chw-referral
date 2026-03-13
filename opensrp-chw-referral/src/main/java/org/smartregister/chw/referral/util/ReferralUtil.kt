@@ -90,6 +90,9 @@ object ReferralUtil {
             Constants.ReferralServiceType.SUSPECTED_HIV.toLowerCase(Locale.getDefault()) -> {
                 return context.getString(R.string.suspected_hiv)
             }
+            Constants.ReferralServiceType.CONVENTIONAL_HIV_TEST.toLowerCase(Locale.getDefault()) -> {
+                return context.getString(R.string.suspected_hiv)
+            }
             Constants.ReferralServiceType.SUSPECTED_TB.toLowerCase(Locale.getDefault()) -> {
                 return context.getString(R.string.suspected_tb)
             }
@@ -132,6 +135,9 @@ object ReferralUtil {
             }
             Constants.ReferralServiceType.ADDO.ADOLESCENT_MINOR_AILMENTS.toLowerCase(Locale.getDefault()) -> {
                 return context.getString(R.string.adolescent_minor_ailments)
+            }
+            Constants.ReferralServiceType.VMMC.toLowerCase(Locale.getDefault()) -> {
+                return context.getString(R.string.vmmc_referral)
             }
         }
         return type

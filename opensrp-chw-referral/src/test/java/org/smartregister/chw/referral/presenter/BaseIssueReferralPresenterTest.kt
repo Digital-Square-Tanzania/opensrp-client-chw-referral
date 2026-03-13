@@ -92,7 +92,8 @@ class BaseIssueReferralPresenterTest {
         verifyAll {
             issueReferralInteractor.saveRegistration(
                 sampleBaseEntityId, valuesHashMap, jsonFormObject,
-                baseIssueReferralPresenter as BaseIssueReferralPresenter, false
+                baseIssueReferralPresenter as BaseIssueReferralPresenter,
+                false
             )
         }
     }

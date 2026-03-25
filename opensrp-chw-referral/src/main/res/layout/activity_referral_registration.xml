@@ -58,15 +58,18 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/completeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="@string/finish"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
                 android:padding="@dimen/toolbar_buttons_padding"
-                android:src="@drawable/ic_info_check"
+                android:text="@string/save"
+                android:textAllCaps="true"
+                android:textColor="@color/colorWhite"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

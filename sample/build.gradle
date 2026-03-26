@@ -1,10 +1,12 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
-android {
+android.with {
     compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    buildToolsVersion androidBuildToolsVersion
+    ndkVersion "21.1.6352462"
 
     defaultConfig {
         applicationId "org.smartregister.chw.referral.sample"
@@ -27,11 +29,29 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LICENSE-notice.md'
+        exclude 'META-INF/NOTICE.md'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':opensrp-chw-referral')
+    implementation(project(':opensrp-chw-referral')) {
+        exclude group: 'com.ibm.fhir'
+        exclude group: 'org.smartregister', module: 'opensrp-plan-evaluator'
+    }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -41,8 +61,4 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-}
-
-configurations{
-    all*.exclude group: 'com.rengwuxian.materialedittext'
 }

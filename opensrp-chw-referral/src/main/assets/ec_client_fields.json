@@ -105,6 +105,14 @@
             "field": "obs.fieldCode",
             "concept": "referral_status"
           }
+        },
+        {
+          "column_name": "is_emergency_case",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "is_emergency_case"
+          }
         }
       ]
     },

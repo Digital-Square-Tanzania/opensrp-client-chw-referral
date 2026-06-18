@@ -215,6 +215,7 @@ object DBConstants {
         const val REFERRAL_DATE = "referral_date"
         const val REFERRAL_TIME = "referral_time"
         const val IS_EMERGENCY_REFERRAL = "is_emergency_referral"
+        const val IS_EMERGENCY_CASE = "is_emergency_case"
         const val PROBLEM = "problem"
         const val PROBLEM_OTHER = "problem_other"
         const val SERVICE_BEFORE_REFERRAL = "service_before_referral"

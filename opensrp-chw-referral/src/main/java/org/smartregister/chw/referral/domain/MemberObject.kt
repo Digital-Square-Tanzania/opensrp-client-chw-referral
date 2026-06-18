@@ -66,4 +66,7 @@ data class MemberObject(val client: CommonPersonObjectClient) : Serializable {
 
     @SerializedName("is_emergency_referral")
     var isEmergencyReferral = client.columnmaps[DBConstants.Key.IS_EMERGENCY_REFERRAL] == "1"
+
+    @SerializedName("is_emergency_case")
+    var isEmergencyCase = client.columnmaps[DBConstants.Key.IS_EMERGENCY_CASE]
 }

@@ -122,6 +122,9 @@ open class ReferralRegisterProvider(
                         pc.columnmaps, DBConstants.Key.REFERRAL_SERVICE, true
                 )
                 textViewService.text = ReferralUtil.getTranslatedReferralServiceType(context, referralType)
+                textViewEmergency.visibility =
+                        if (Utils.getValue(pc.columnmaps, DBConstants.Key.IS_EMERGENCY_CASE, true)
+                                        .equals("Yes", ignoreCase = true)) View.VISIBLE else View.GONE
                 textViewFacility.text = Utils.getValue(
                         pc.columnmaps, DBConstants.Key.REFERRAL_HF, true
                 )
@@ -216,6 +219,7 @@ open class ReferralRegisterProvider(
         var patientColumn: View = itemView.findViewById(R.id.patient_column)
         var textViewService: TextView = itemView.findViewById(R.id.text_view_service)
         var textViewFacility: TextView = itemView.findViewById(R.id.text_view_facility)
+        var textViewEmergency: TextView = itemView.findViewById(R.id.text_view_emergency)
         var registerColumns: View = itemView.findViewById(R.id.register_columns)
         var dueWrapper: View = itemView.findViewById(R.id.due_button_wrapper)
         var followUpWrapper: View = itemView.findViewById(R.id.followup_button_wrapper);

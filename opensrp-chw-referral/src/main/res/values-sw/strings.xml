@@ -85,6 +85,8 @@
     <string name="phone_not_provided">Namba ya simu haijatolewa</string>
     <string name="referral_facility">Kituo kinachopokea rufaa</string>
     <string name="referral_type">Aina ya Rufaa</string>
+    <string name="is_emergency_case">Dharura</string>
+    <string name="emergency_badge">Dharura</string>
     <string name="pre_referral_management">Huduma ya awali kabla ya kutoa rufaa</string>
 
 

@@ -87,6 +87,8 @@
     <string name="phone_not_provided">Phone not provided</string>
     <string name="referral_facility">Referral Facility</string>
     <string name="referral_type">Referral Type</string>
+    <string name="is_emergency_case">Emergency case</string>
+    <string name="emergency_badge">Emergency</string>
     <string name="pre_referral_management">Pre-referral management given</string>
 
 

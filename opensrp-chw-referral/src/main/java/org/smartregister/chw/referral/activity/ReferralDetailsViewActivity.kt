@@ -39,6 +39,8 @@ open class ReferralDetailsViewActivity : SecuredActivity() {
     private lateinit var referralFacility: CustomFontTextView
     private lateinit var preReferralManagement: CustomFontTextView
     private lateinit var referralType: CustomFontTextView
+    private lateinit var isEmergencyCase: CustomFontTextView
+    private lateinit var isEmergencyCaseLayout: ViewGroup
     private lateinit var problemLayout: ViewGroup
     private lateinit var preManagementServicesServices: ViewGroup
     val baseEntityId: String? = null
@@ -85,6 +87,8 @@ open class ReferralDetailsViewActivity : SecuredActivity() {
         referralFacility = findViewById(R.id.referral_facility)
         preReferralManagement = findViewById(R.id.pre_referral_management)
         referralType = findViewById(R.id.referral_type)
+        isEmergencyCase = findViewById(R.id.is_emergency_case)
+        isEmergencyCaseLayout = findViewById(R.id.is_emergency_case_layout)
         problemLayout = findViewById(R.id.client_referral_problem_layout)
         preManagementServicesServices = findViewById(R.id.client_pre_referral_management_layout)
         obtainReferralDetails()
@@ -103,6 +107,17 @@ open class ReferralDetailsViewActivity : SecuredActivity() {
             referralFacility.text = it.chwReferralHf
             referralType.text =
                 ReferralUtil.getTranslatedReferralServiceType(this, it.chwReferralService!!)
+            when {
+                it.isEmergencyCase.equals("Yes", ignoreCase = true) -> {
+                    isEmergencyCaseLayout.visibility = View.VISIBLE
+                    isEmergencyCase.text = getString(R.string.yes)
+                }
+                it.isEmergencyCase.equals("No", ignoreCase = true) -> {
+                    isEmergencyCaseLayout.visibility = View.VISIBLE
+                    isEmergencyCase.text = getString(R.string.no)
+                }
+                else -> isEmergencyCaseLayout.visibility = View.GONE
+            }
             if (!it.primaryCareGiver.isNullOrEmpty() && clientAge.toInt() < 5)
                 careGiverName.text = String.format("CG : %s", it.primaryCareGiver)
             else
